@@ -18,17 +18,24 @@ body {
 
 .game-board {
   display: grid;
-  width: 45%;
+  width: 470px;
   margin: auto;
   background-color: #000000;
   grid-gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(3, 150px);
   color: #000000;
 }
 
 .square {
   background-color: #dddddd;
   text-align: center;
-  padding-bottom: 100%;
+  font-size: 120px;
+  line-height: 150px;
+  font-family: 'Source Code Pro', monospace;
+  cursor: pointer;
+}
+
+.square:hover {
+  background-color: #cccccc;
 }

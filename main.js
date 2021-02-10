@@ -5,9 +5,17 @@ const gameBoard = (() => {
 
 const displayController = ((doc) => {
   const display = (array) => {
-    array.forEach((element) => {})
+    array.forEach((element, index) => {
+      doc.querySelectorAll('.square')[index].textContent = element
+    })
   }
   return { display }
 })(document)
 
-const players = () => {}
+displayController.display(gameBoard.board)
+
+const players = () => {
+  const score
+}
+
+const game = (() => {})()
