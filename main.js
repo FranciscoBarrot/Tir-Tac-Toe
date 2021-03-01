@@ -1,6 +1,11 @@
 const gameBoard = (() => {
   const board = Array(9)
-  return { board }
+  const cleanUpBoard = () => {
+    for (i = 0; i < 9; i++) {
+      board[i] = undefined
+    }
+  }
+  return { board, cleanUpBoard }
 })()
 
 const displayController = ((doc) => {
@@ -9,8 +14,14 @@ const displayController = ((doc) => {
       doc.querySelectorAll('.square')[index].textContent = element
     })
   }
-  const displayWinner = () => {}
-  return { display, displayWinner }
+  const displayWinner = (player) => {
+    doc.querySelector('.winner-display').textContent =
+      'Player ' + player.mark.toUpperCase() + ' Wins'
+  }
+  const cleanWinnerDisplay = () => {
+    doc.querySelector('.winner-display').textContent = ''
+  }
+  return { display, displayWinner, cleanWinnerDisplay }
 })(document)
 
 const players = (mark) => {
@@ -19,8 +30,8 @@ const players = (mark) => {
   const markTheSpot = (index, array) => {
     array[index] = mark
   }
-  const win = () => {
-    _winner = true
+  const setWinner = (boolean) => {
+    _winner = boolean
   }
   const getWinner = () => {
     return _winner
@@ -31,7 +42,7 @@ const players = (mark) => {
   const getName = () => {
     return _name
   }
-  return { mark, markTheSpot, win, getWinner, getName, setName }
+  return { mark, markTheSpot, setWinner, getWinner, getName, setName }
 }
 
 const game = ((doc) => {
@@ -43,7 +54,7 @@ const game = ((doc) => {
         (array[i] !== undefined) &
         ((array[i] === array[i + 3]) & (array[i] === array[i + 6]))
       ) {
-        player.win()
+        player.setWinner(true)
         break
       }
     }
@@ -55,7 +66,7 @@ const game = ((doc) => {
         (array[j] !== undefined) &
         ((array[j] === array[j + 1]) & (array[j] === array[j + 2]))
       ) {
-        player.win()
+        player.setWinner(true)
         break
       }
     }
@@ -66,10 +77,9 @@ const game = ((doc) => {
       ((array[4] === array[0]) & (array[4] === array[8]) ||
         (array[4] === array[2]) & (array[4] === array[6]))
     ) {
-      player.win()
+      player.setWinner(true)
     }
   }
-
   const _checkTie = (array) => {
     let fullBoard = true
     array.forEach((square) => {
@@ -80,7 +90,6 @@ const game = ((doc) => {
     if (fullBoard) {
     }
   }
-
   const _checkWinnner = (player, board) => {
     _checkColumn(board, player)
     _checkRow(board, player)
@@ -107,7 +116,7 @@ const game = ((doc) => {
           }
           displayController.display(array)
           if (player1.getWinner()) {
-            displayController.displayWinner(player1.)
+            displayController.displayWinner(player1)
           } else if (player2.getWinner()) {
             displayController.displayWinner(player2)
           }
@@ -115,10 +124,22 @@ const game = ((doc) => {
       })
     })
   }
-  return { addClickHander }
+
+  const restart = () => {
+    gameBoard.cleanUpBoard()
+    displayController.display(gameBoard.board)
+    player1.setWinner(false)
+    player2.setWinner(false)
+    displayController.cleanWinnerDisplay()
+  }
+  return { addClickHander, restart }
 })(document)
 
 const player1 = players('x')
 const player2 = players('o')
 
 game.addClickHander(gameBoard.board, player1, player2)
+
+const popupBtn = document
+  .querySelector('.restart-btn')
+  .addEventListener('click', game.restart)
